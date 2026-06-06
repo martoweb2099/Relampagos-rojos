@@ -1,12 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para ti · Carta I</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tarjeta1.css">
 </head>
 <body>
-    <h1>Tarjeta 1</h1>
-    <p>Esta es la tarjeta 1. Aquí puedes escribir tu mensaje para esa persona especial.</p>
+
+  <!-- ══ CORAZONES DE FONDO (generados por JS) ══ -->
+  <div id="hearts-bg"></div>
+
+  <!-- ══ AUDIO ══ -->
+  <!-- Cambia "cancion.mp3" por la ruta real de tu archivo de audio -->
+  <audio id="audio" src="cancionmkof.mp3" loop></audio>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav>
+    <a href="index.html" class="btn-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Volver
+    </a>
+    <div class="nav-divider"></div>
+    <div class="player">
+      <button class="btn-play" id="btnPlay" aria-label="Reproducir / Pausar">▶</button>
+      <div class="player-info">
+        <!-- Cambia el nombre de la canción aquí -->
+        <div class="player-title" id="songTitle">My mujer ideal</div>
+        <div class="player-status" id="playerStatus">Pausado</div>
+      </div>
+      <div class="player-bars" id="playerBars">
+        <div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══ ESCENARIO PRINCIPAL ══ -->
+  <div class="stage">
+
+    <!-- SOBRE CERRADO -->
+    <div id="envelope" role="button" aria-label="Haz clic para abrir la carta" tabindex="0">
+      <div class="env-body">
+        <div class="env-flap-bottom"></div>
+        <div class="env-flap-left"></div>
+        <div class="env-flap-right"></div>
+        <div class="env-flap-top"></div>
+        <div class="env-seal">
+          <span class="seal-heart">♥</span>
+          <span class="seal-text">Haz clic para abrir…</span>
+        </div>
+      </div>
+    </div>
+
+<h1 class="letter-title">Relampagos rojos</h1>
+
+    <!-- CARTA ABIERTA -->
+    <div id="letter">
+
+      <!-- Cabecera -->
+      <div class="letter-header">
+        <div class="letter-ornament">· ♥ ·</div>
+
+        <!-- TÍTULO PRINCIPAL — pon tu título entre las etiquetas -->
+        <h1 class="letter-title">Relampagos rojos<!-- AQUÍ VA EL TÍTULO --></h1>
+
+        <!-- Fecha opcional — cámbiala o bórrala -->
+        <p class="letter-date"><!-- AQUÍ VA LA FECHA --></p>
+
+        <div class="letter-divider"></div>
+      </div>
+
+      <!-- Cuerpo del texto -->
+      <!-- El atributo white-space:pre-line respeta tus saltos de línea -->
+      <p class="letter-body">Te amo<!-- AQUÍ VA TU TEXTO LARGO
+
+Puedes escribir en varias líneas
+y los saltos de línea se respetarán tal cual. --></p>
+
+      <!-- Galería de imágenes -->
+      <!-- Asigna src="ruta/de/tu/imagen.jpg" a cada <img> -->
+      <div class="letter-gallery">
+  <img src="img/foto1.jpeg" alt="Foto Especial">
+</div>
+
+      <!-- Firma -->
+      <div class="letter-signature">
+        <div class="signature-line"></div>
+        <p class="signature-name"><!-- AQUÍ VA TU FIRMA --></p>
+        <p class="signature-sub"><!-- AQUÍ VA UN SUBTÍTULO DE FIRMA, ej: "Con todo mi amor" --></p>
+      </div>
+
+      <!-- Botón para volver a cerrar -->
+      <button class="btn-close" id="btnClose">Cerrar carta</button>
+
+    </div><!-- /#letter -->
+  </div><!-- /.stage -->
+
+  <script>
+    // ══ CORAZONES DE FONDO ══
+    (function() {
+      var bg = document.getElementById('hearts-bg');
+      for (var i = 0; i < 22; i++) {
+        var h       = document.createElement('span');
+        h.textContent = '♥';
+        h.className   = 'bg-heart';
+        var size    = (Math.random() * 22 + 10).toFixed(1);
+        var opacity = (Math.random() * 0.13 + 0.04).toFixed(2);
+        var top     = (Math.random() * 96).toFixed(1);
+        var left    = (Math.random() * 96).toFixed(1);
+        var dur     = (Math.random() * 6 + 5).toFixed(1);
+        var delay   = (Math.random() * 6).toFixed(1);
+        h.style.cssText =
+          'font-size:'  + size    + 'px;' +
+          'opacity:'    + opacity + ';'   +
+          'top:'        + top     + '%;'  +
+          'left:'       + left    + '%;'  +
+          'animation-duration:' + dur   + 's;' +
+          'animation-delay:-'   + delay + 's;';
+        bg.appendChild(h);
+      }
+    })();
+
+    // ══ REPRODUCTOR ══
+    var audio   = document.getElementById('audio');
+    var btnPlay = document.getElementById('btnPlay');
+    var statusEl = document.getElementById('playerStatus');
+    var barsEl   = document.getElementById('playerBars');
+
+    btnPlay.addEventListener('click', function() {
+      audio.paused ? audio.play().catch(function(){}) : audio.pause();
+    });
+
+    audio.addEventListener('play', function() {
+      btnPlay.textContent  = '⏸';
+      statusEl.textContent = 'Reproduciendo';
+      barsEl.classList.add('active');
+    });
+
+    audio.addEventListener('pause', function() {
+      btnPlay.textContent  = '▶';
+      statusEl.textContent = 'Pausado';
+      barsEl.classList.remove('active');
+    });
+
+    // ══ SOBRE → CARTA ══
+    var envelope = document.getElementById('envelope');
+    var letter   = document.getElementById('letter');
+    var btnClose = document.getElementById('btnClose');
+
+    function openLetter() {
+      envelope.style.transition = 'opacity .4s ease, transform .4s ease';
+      envelope.style.opacity    = '0';
+      envelope.style.transform  = 'scale(.92) translateY(-12px)';
+      setTimeout(function() {
+        envelope.style.display = 'none';
+        letter.style.display   = 'block';
+      }, 380);
+    }
+
+    function closeLetter() {
+      letter.style.display = 'none';
+      envelope.style.display = 'block';
+      void envelope.offsetWidth;
+      envelope.style.opacity   = '1';
+      envelope.style.transform = 'scale(1) translateY(0)';
+    }
+
+    envelope.addEventListener('click', openLetter);
+    envelope.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') openLetter();
+    });
+    btnClose.addEventListener('click', closeLetter);
+  </script>
+
 </body>
 </html>

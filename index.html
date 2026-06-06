@@ -4,14 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Para ti</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <span class="header-ornament">· · ♥ · ·</span>
     <h1>Cartas virtuales para mi futura esposa</h1>
@@ -19,31 +17,25 @@
     <p>Cuando quieras sentir mi presencia, lee mis cartas fisicas o virtuales.</p>
   </header>
 
-  <!-- MAIN -->
   <main>
     <p class="section-label">Cartas para ti</p>
     <div class="grid">
 
-      <!--
-        CARTA — Edita el texto dentro de .card-text
-        Para agregar más cartas, duplica este bloque <a class="card">…</a>
-      -->
-      <!-- Cambia el href="#" por tu archivo -->
-        <a href="tarjeta1.html" class="card">
+      <a href="tarjeta1.html" class="card" data-hash="66ef782705753c9ea5bdd1fa49f611d43d6384434e6b3ac2f75c9e44cb0316fc">
         <span class="card-number">Relampagos rojos.</span>
         <div class="card-line"></div>
         <p class="card-text">Carta 1</p>
-        </a>
+      </a>
 
-        <a href="tarjeta2.html" class="card">
+      <a href="tarjeta2.html" class="card">
         <span class="card-number">un poco de ti en mi, un poco de mi en ti.</span>
         <div class="card-line"></div>
         <p class="card-text">Carta 2</p>
-        </a>
+      </a>
+
     </div>
   </main>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-inner">
       <span class="footer-ornament">♥</span>
@@ -60,7 +52,45 @@
   </footer>
 
 <script>
-  // Seleccionamos el botón, el textarea y el texto del botón
+  // ══ 1. SISTEMA DE CONTRASEÑAS ULTRARROBUSTO ══
+  document.querySelectorAll('.card[data-hash]').forEach(tarjeta => {
+    tarjeta.addEventListener('click', async function(event) {
+      event.preventDefault(); // Evita que la página salte antes de la contraseña
+      
+      // Usamos 'tarjeta' directamente para que sea imposible que falle el navegador
+      const urlDestino = tarjeta.href;
+      const hashCorrecto = tarjeta.getAttribute('data-hash');
+      
+      try {
+        const passwordUsuario = prompt("Esta carta está protegida. Introduce la contraseña: ♥");
+        if (!passwordUsuario) return; // Si el usuario cancela o lo deja vacío, no hace nada
+
+        // Verificación de entorno seguro (Crypto requiere HTTPS obligatorio en internet)
+        if (!window.crypto || !window.crypto.subtle) {
+          alert("Por seguridad del navegador, las contraseñas encriptadas solo funcionan en internet. Sube tus cambios a GitHub/Vercel para probarlo en tu link en vivo. ♥");
+          return;
+        }
+
+        // Proceso de encriptación instantánea a SHA-256
+        const encoder = new TextEncoder();
+        const data = encoder.encode(passwordUsuario);
+        const buffer = await window.crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(buffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        if (hashHex === hashCorrecto) {
+          window.location.href = urlDestino; // Da el acceso
+        } else {
+          alert("Contraseña incorrecta... Inténtalo de nuevo. ❌");
+        }
+      } catch (error) {
+        console.error("Error en el sistema de contraseñas:", error);
+        alert("Hubo un detalle con el navegador. Asegúrate de estar probando la página desde tu enlace en vivo de internet.");
+      }
+    });
+  });
+
+  // ══ 2. SISTEMA ENVIAR MENSAJES A GOOGLE SHEETS ══
   const botonEnviar = document.querySelector('.btn-send');
   const campoTexto = document.querySelector('textarea');
   const textoBoton = botonEnviar.querySelector('span');
@@ -68,31 +98,26 @@
   botonEnviar.addEventListener('click', function() {
     const mensaje = campoTexto.value.trim();
 
-    // Validamos que el usuario de verdad haya escrito algo
     if (mensaje === "") {
       alert("¡Escribe algo primero antes de enviar! ♥");
       return;
     }
 
-    // Cambiamos el texto del botón para mostrar que se está enviando
     textoBoton.textContent = "Enviando...";
     botonEnviar.style.opacity = "0.7";
     botonEnviar.disabled = true;
 
-    // REEMPLAZA ESTE ENLACE CON TU URL DE SHEETDB
     const urlAPI = 'https://sheetdb.io/api/v1/qd2kd2ih26wla';
 
-    // Estructuramos los datos exactamente como las columnas de tu Excel
     const datos = {
       data: [
         {
-          "Fecha": new Date().toLocaleString('es-MX'), // Guarda día y hora de México
+          "Fecha": new Date().toLocaleString('es-MX'),
           "Mensaje": mensaje
         }
       ]
     };
 
-    // Enviamos los datos a la hoja de cálculo
     fetch(urlAPI, {
       method: 'POST',
       headers: {
@@ -102,13 +127,12 @@
     })
     .then(response => response.json())
     .then(data => {
-      // Si todo sale bien, limpiamos el formulario y avisamos
       textoBoton.textContent = "Enviar · ♥";
       botonEnviar.style.opacity = "1";
       botonEnviar.disabled = false;
       
       alert("Tu mensaje ha sido guardado con éxito. ♥");
-      campoTexto.value = ""; // Borra lo que escribió para que quede limpio
+      campoTexto.value = "";
     })
     .catch(error => {
       console.error('Error:', error);
