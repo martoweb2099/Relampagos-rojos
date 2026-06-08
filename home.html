@@ -7,6 +7,88 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+  
+  <style>
+    /* ══ ESTILOS EXCLUSIVOS DEL MURO DE CHAT ══ */
+    .chat-container {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto 24px;
+      background: #0E0E0E;
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left; /* Alinea el texto a la izquierda dentro del chat */
+    }
+    .chat-wall {
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 6px;
+    }
+    .msg {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: .88rem;
+      line-height: 1.4;
+      font-family: var(--sans);
+    }
+    /* Estilo burbuja Luis (Rojo Oscuro) */
+    .msg-Luis {
+      background: #4B262F;
+      color: #EED3BA;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+    /* Estilo burbuja Brissa (Crema) */
+    .msg-Brissa {
+      background: #EED3BA;
+      color: #151311;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+    .msg-meta {
+      font-size: .65rem;
+      opacity: 0.6;
+      margin-top: 4px;
+      text-align: right;
+      display: block;
+    }
+    /* Selector de quién escribe */
+    .author-selector {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .author-btn {
+      background: transparent;
+      border: 1px solid rgba(75,38,47,.6);
+      color: #9C8FAA;
+      padding: 6px 16px;
+      font-size: .75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: all 0.2s;
+    }
+    .author-btn.active {
+      background: #4B262F;
+      color: #EED3BA;
+      border-color: #4B262F;
+    }
+    .author-btn-Brissa.active {
+      background: #EED3BA;
+      color: #151311;
+      border-color: #EED3BA;
+    }
+  </style>
 </head>
 <body>
 
@@ -39,12 +121,22 @@
   <footer>
     <div class="footer-inner">
       <span class="footer-ornament">♥</span>
-      <h2>¿Quieres decirme algo?</h2>
-      <p>Este espacio también es tuyo. Escríbeme lo que quieras.</p>
+      <h2>Nuestro espacio secreto</h2>
+      <p>Déjame una respuesta o lee lo que nos hemos escrito aquí abajo en tiempo real.</p>
 
-      <textarea placeholder="Escribe lo que llevas dentro…" aria-label="Mensaje"></textarea>
-      <button class="btn-send" type="button">
-        <span>Enviar</span>
+      <div class="chat-container">
+        <div class="chat-wall" id="chatWall">
+          </div>
+      </div>
+
+      <div class="author-selector">
+        <button type="button" class="author-btn active" id="btnLuis" onclick="setAutor('Luis')">Soy Luis</button>
+        <button type="button" class="author-btn" id="btnBrissa" onclick="setAutor('Brissa')">Soy Brissa</button>
+      </div>
+
+      <textarea placeholder="Escribe tu respuesta aquí…" id="txtMensaje" aria-label="Mensaje"></textarea>
+      <button class="btn-send" type="button" id="btnEnviar">
+        <span>Enviar Mensaje</span>
       </button>
 
       <p class="footer-copy">Hecho de mi para ti</p>
