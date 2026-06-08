@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para ti</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+</head>
+<body>
+
+  <header>
+    <span class="header-ornament">· · ♥ · ·</span>
+    <h1>Cartas virtuales para mi futura esposa</h1>
+    <div class="header-divider"></div>
+    <p>Cuando quieras sentir mi presencia, lee mis cartas fisicas o virtuales.</p>
+  </header>
+
+  <main>
+    <p class="section-label">Cartas para ti</p>
+    <div class="grid">
+
+      <a href="tarjeta1.html" class="card">
+        <span class="card-number">Relampagos rojos.</span>
+        <div class="card-line"></div>
+        <p class="card-text">Carta 1</p>
+      </a>
+
+      <a href="tarjeta2.html" class="card">
+        <span class="card-number">un poco de ti en mi, un poco de mi en ti.</span>
+        <div class="card-line"></div>
+        <p class="card-text">Carta 2</p>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-ornament">♥</span>
+      <h2>¿Quieres decirme algo?</h2>
+      <p>Este espacio también es tuyo. Escríbeme lo que quieras.</p>
+
+      <textarea placeholder="Escribe lo que llevas dentro…" aria-label="Mensaje"></textarea>
+      <button class="btn-send" type="button">
+        <span>Enviar</span>
+      </button>
+
+      <p class="footer-copy">Hecho de mi para ti</p>
+    </div>
+  </footer>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  // ══ CONFIGURACIÓN DE TU CONEXIÓN A FIREBASE ══
+  // ⚠️ REEMPLAZA LOS DATOS DE ESTE OBJETO CON LAS LLAVES QUE COPIASTE EN EL PASO 1
+  const firebaseConfig = {
+    apiKey: "AIzaSyCZmE5JUy7pvDe3tWBGkH9saFpX9JbOWjU",
+    authDomain: "rojo-proyecto-f0188.firebaseapp.com",
+    databaseURL: "https://rojo-proyecto-f0188-default-rtdb.firebaseio.com",
+    projectId: "rojo-proyecto-f0188",
+    storageBucket: "rojo-proyecto-f0188.firebasestorage.app",
+    messagingSenderId: "616930713040",
+    appId: "1:616930713040:web:c0f462eb33344c901badd5"
+  };
+
+  // Inicializamos Firebase de forma nativa
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  // Control del Selector de Autor
+  // Control del Selector de Autor con Llave Digital Oculta
+  let autorActual = "Luis";
+  const btnLuis = document.getElementById('btnLuis');
+  const btnBrissa = document.getElementById('btnBrissa');
+
+  // PIN secreto para autorizar el dispositivo de Brissa (Cámbialo por el que quieras)
+  const PIN_SECRETO_BRISSA = "amor0909"; 
+
+  async function setAutor(autor) {
+    if (autor === "Luis") {
+      autorActual = autor;
+      btnLuis.classList.add('active');
+      btnBrissa.classList.remove('active', 'author-btn-Brissa');
+    } else {
+      // 🛡️ REVISAMOS SI SU CELULAR YA TIENE LA LLAVE OCULTA
+      const yaEstaAutorizada = localStorage.getItem('dispositivoAutorizadoBrissa');
+
+      if (yaEstaAutorizada === "true") {
+        // Si ya está autorizada, la dejamos pasar directo
+        autorActual = autor;
+        btnBrissa.classList.add('active', 'author-btn-Brissa');
+        btnLuis.classList.remove('active');
+      } else {
+        // 🔒 Si es un dispositivo nuevo (o un intruso), pedimos el PIN
+        const pinIngresado = prompt("Acceso de seguridad: Introduce tu PIN secreto para activar este perfil de forma permanente en este dispositivo: ♥");
+        
+        if (pinIngresado === PIN_SECRETO_BRISSA) {
+          // ¡Éxito! Guardamos la llave en la memoria de su cel para siempre
+          localStorage.setItem('dispositivoAutorizadoBrissa', 'true');
+          
+          autorActual = autor;
+          btnBrissa.classList.add('active', 'author-btn-Brissa');
+          btnLuis.classList.remove('active');
+          alert("¡Dispositivo verificado con éxito! Ya no tendrás que volver a poner el PIN en este celular. 😍");
+        } else {
+          alert("PIN incorrecto. No tienes permiso para usar este perfil. ❌");
+        }
+      }
+    }
+  }
+
+  // Elementos de la interfaz
+  const chatWall = document.getElementById('chatWall');
+  const txtMensaje = document.getElementById('txtMensaje');
+  const btnEnviar = document.getElementById('btnEnviar');
+  const textoBoton = btnEnviar.querySelector('span');
+
+  // ══ LECTURA EN TIEMPO REAL ══
+  database.ref('mensajes').on('child_added', (snapshot) => {
+    const datos = snapshot.val();
+    
+    const divMensaje = document.createElement('div');
+    divMensaje.classList.add('msg');
+    
+    // Le asignamos su estilo dependiendo del autor
+    if (datos.autor === "Luis") {
+      divMensaje.classList.add('msg-Luis');
+    } else {
+      divMensaje.classList.add('msg-Brissa');
+    }
+
+    // 🌟 TRUCO EXTRA: Emojis automáticos para distinguir de volada
+    const nombreConEmoji = datos.autor === "Luis" ? " Luis" : "Brissa 🌹";
+
+    divMensaje.innerHTML = `
+      <div><strong>${nombreConEmoji}:</strong> ${datos.texto}</div>
+      <span class="msg-meta">${datos.hora}</span>
+    `;
+
+    chatWall.appendChild(divMensaje);
+    chatWall.scrollTop = chatWall.scrollHeight; // Auto-scroll al último mensaje
+  });
+
+  // ══ ESCRITURA / ENVIAR MENSAJE ══
+  btnEnviar.addEventListener('click', function() {
+    const texto = txtMensaje.value.trim();
+    if (texto === "") {
+      alert("¡Escribe una respuesta primero! ♥");
+      return;
+    }
+
+    textoBoton.textContent = "Enviando...";
+    btnEnviar.disabled = true;
+
+    // Mandamos el objeto directo a Firebase de forma asíncrona
+    database.ref('mensajes').push({
+      autor: autorActual,
+      texto: texto,
+      hora: new Date().toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+    }).then(() => {
+      textoBoton.textContent = "Enviar Mensaje";
+      btnEnviar.disabled = false;
+      txtMensaje.value = ""; // Limpia el cuadro de texto
+    }).catch((error) => {
+      console.error(error);
+      alert("Error al enviar el mensaje.");
+      textoBoton.textContent = "Enviar Mensaje";
+      btnEnviar.disabled = false;
+    });
+  });
+</script>
+
+</body>
+</html>

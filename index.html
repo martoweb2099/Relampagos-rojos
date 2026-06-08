@@ -3,144 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para ti</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+  <title>Acceso Privado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:ital,wght=0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      min-height: 100vh;
+      background: #151311; /* Obsidian Ink */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #EED3BA; /* Almond Hearth */
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+    .lock-card {
+      max-width: 400px;
+      width: 100%;
+      padding: 40px 24px;
+      background: rgba(75, 38, 47, 0.1); /* Sutil Velvet */
+      border: 1px solid rgba(75, 38, 47, 0.3);
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .lock-icon {
+      font-size: 3.8rem;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: heartbeat 1.4s ease-in-out infinite;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #EED3BA;
+    }
+    p {
+      font-size: .88rem;
+      opacity: 0.6;
+      margin-bottom: 32px;
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+    }
+    .btn-unlock {
+      background: #4B262F; /* Velvet Curfew */
+      color: #EED3BA;
+      border: 1px solid rgba(238,211,186,0.15);
+      padding: 14px 40px;
+      font-size: .85rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.25s ease;
+      width: 100%;
+    }
+    .btn-unlock:hover {
+      background: #63323E;
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(75,38,47,0.4);
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.15); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.08); }
+      56% { transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <span class="header-ornament">· · ♥ · ·</span>
-    <h1>Cartas virtuales para mi futura esposa</h1>
-    <div class="header-divider"></div>
-    <p>Cuando quieras sentir mi presencia, lee mis cartas fisicas o virtuales.</p>
-  </header>
-
-  <main>
-    <p class="section-label">Cartas para ti</p>
-    <div class="grid">
-
-      <a href="tarjeta1.html" class="card" data-hash="66ef782705753c9ea5bdd1fa49f611d43d6384434e6b3ac2f75c9e44cb0316fc">
-        <span class="card-number">Relampagos rojos.</span>
-        <div class="card-line"></div>
-        <p class="card-text">Carta 1</p>
-      </a>
-
-      <a href="tarjeta2.html" class="card">
-        <span class="card-number">un poco de ti en mi, un poco de mi en ti.</span>
-        <div class="card-line"></div>
-        <p class="card-text">Carta 2</p>
-      </a>
-
-    </div>
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-ornament">♥</span>
-      <h2>¿Quieres decirme algo?</h2>
-      <p>Este espacio también es tuyo. Escríbeme lo que quieras.</p>
-
-      <textarea placeholder="Escribe lo que llevas dentro…" aria-label="Mensaje"></textarea>
-      <button class="btn-send" type="button">
-        <span>Enviar</span>
-      </button>
-
-      <p class="footer-copy">Hecho de mi para ti</p>
-    </div>
-  </footer>
+  <div class="lock-card">
+    <div class="lock-icon">❤️</div>
+    <h2>¿A donde vas?</h2>
+    <p><br>Por favor introduce la contraseña para pasar.</p>
+    <button type="button" class="btn-unlock" id="btnAcceso">Entrar</button>
+  </div>
 
 <script>
-  // ══ 1. SISTEMA DE CONTRASEÑAS ULTRARROBUSTO ══
-  document.querySelectorAll('.card[data-hash]').forEach(tarjeta => {
-    tarjeta.addEventListener('click', async function(event) {
-      event.preventDefault(); // Evita que la página salte antes de la contraseña
-      
-      // Usamos 'tarjeta' directamente para que sea imposible que falle el navegador
-      const urlDestino = tarjeta.href;
-      const hashCorrecto = tarjeta.getAttribute('data-hash');
-      
-      try {
-        const passwordUsuario = prompt("Esta carta está protegida. Introduce la contraseña: ♥");
-        if (!passwordUsuario) return; // Si el usuario cancela o lo deja vacío, no hace nada
+  // 🔑 Contraseña encriptada segura (Clave real: boda2026)
+  const HASH_CORRECTO = "66ef782705753c9ea5bdd1fa49f611d43d6384434e6b3ac2f75c9e44cb0316fc";
 
-        // Verificación de entorno seguro (Crypto requiere HTTPS obligatorio en internet)
-        if (!window.crypto || !window.crypto.subtle) {
-          alert("Por seguridad del navegador, las contraseñas encriptadas solo funcionan en internet. Sube tus cambios a GitHub/Vercel para probarlo en tu link en vivo. ♥");
-          return;
-        }
+  document.getElementById('btnAcceso').addEventListener('click', async () => {
+    try {
+      const password = prompt("Introduce la contraseña de acceso: ♥");
+      if (!password) return;
 
-        // Proceso de encriptación instantánea a SHA-256
-        const encoder = new TextEncoder();
-        const data = encoder.encode(passwordUsuario);
-        const buffer = await window.crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(buffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-        if (hashHex === hashCorrecto) {
-          window.location.href = urlDestino; // Da el acceso
-        } else {
-          alert("Contraseña incorrecta... Inténtalo de nuevo. ❌");
-        }
-      } catch (error) {
-        console.error("Error en el sistema de contraseñas:", error);
-        alert("Hubo un detalle con el navegador. Asegúrate de estar probando la página desde tu enlace en vivo de internet.");
+      if (!window.crypto || !window.crypto.subtle) {
+        alert("Por seguridad del navegador, los accesos seguros requieren el link en vivo de internet (HTTPS). ¡Sube los cambios para probarlo!");
+        return;
       }
-    });
-  });
 
-  // ══ 2. SISTEMA ENVIAR MENSAJES A GOOGLE SHEETS ══
-  const botonEnviar = document.querySelector('.btn-send');
-  const campoTexto = document.querySelector('textarea');
-  const textoBoton = botonEnviar.querySelector('span');
+      // Encriptación instantánea SHA-256
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const buffer = await window.crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(buffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-  botonEnviar.addEventListener('click', function() {
-    const mensaje = campoTexto.value.trim();
-
-    if (mensaje === "") {
-      alert("¡Escribe algo primero antes de enviar! ♥");
-      return;
+      if (hashHex === HASH_CORRECTO) {
+        // Al poner la clave bien, saltamos directo a la página de las cartas
+        window.location.href = "home.html";
+      } else {
+        alert("Contraseña incorrecta... Acceso denegado. ❌");
+      }
+    } catch (error) {
+      alert("Error en el sistema de verificación.");
     }
-
-    textoBoton.textContent = "Enviando...";
-    botonEnviar.style.opacity = "0.7";
-    botonEnviar.disabled = true;
-
-    const urlAPI = 'https://sheetdb.io/api/v1/qd2kd2ih26wla';
-
-    const datos = {
-      data: [
-        {
-          "Fecha": new Date().toLocaleString('es-MX'),
-          "Mensaje": mensaje
-        }
-      ]
-    };
-
-    fetch(urlAPI, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(datos)
-    })
-    .then(response => response.json())
-    .then(data => {
-      textoBoton.textContent = "Enviar · ♥";
-      botonEnviar.style.opacity = "1";
-      botonEnviar.disabled = false;
-      
-      alert("Tu mensaje ha sido guardado con éxito. ♥");
-      campoTexto.value = "";
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert("Hubo un pequeño problema al enviar. Inténtalo de nuevo.");
-      textoBoton.textContent = "Enviar · ♥";
-      botonEnviar.style.opacity = "1";
-      botonEnviar.disabled = false;
-    });
   });
 </script>
 
